@@ -1,0 +1,86 @@
+HTMLstudentregistration<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Form</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Student Registration Form</h2>
+<form id="registrationForm">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name"><br><br>
+    
+    <label for="email">Email:</label><br>
+    <input type="text" id="email" name="email"><br><br>
+    
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    
+    <label for="confirmPassword">Confirm Password:</label><br>
+    <input type="password" id="confirmPassword" name="confirmPassword"><br><br>
+    
+    <input type="submit" value="Register">
+</form>
+
+<div id="errorMessages" class="error"></div>
+
+<script>
+    document.getElementById("registrationForm").onsubmit = function(event) {
+        event.preventDefault();
+        validateForm();
+    };
+
+    function validateForm() {
+        let errors = [];
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        // Ensure no field is left blank
+        if (!name || !email || !password || !confirmPassword) {
+            errors.push("All fields must be filled out.");
+        }
+
+        // Validate email format
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            errors.push("Invalid email format.");
+        }
+
+        // Ensure password and confirm password match
+        if (password !== confirmPassword) {
+            errors.push("Passwords do not match.");
+        }
+
+        // Validate password strength
+        const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!passwordPattern.test(password)) {
+            errors.push("Password must be at least 8 characters, contain a number, and an uppercase letter.");
+        }
+
+        const errorMessagesDiv = document.getElementById("errorMessages");
+        errorMessagesDiv.innerHTML = ""; // Clear previous messages
+
+        if (errors.length > 0) {
+            errors.forEach(error => {
+                const p = document.createElement("p");
+                p.textContent = error;
+                errorMessagesDiv.appendChild(p);
+            });
+        } else {
+            alert("Registration successful!");
+            // Here you can proceed with form submission or further processing
+        }
+    }
+</script>
+
+</body>
+</html>
